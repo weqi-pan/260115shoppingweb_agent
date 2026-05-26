@@ -31,7 +31,6 @@ instance/
 ecommerce_agent/product_vector_store/
 
 # Local model files
-bge-large-zh-v1.5/
 models/
 
 # IDE/editor
