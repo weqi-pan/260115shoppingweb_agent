@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS  # 新增：导入CORS
 from config import (
     OPENAI_API_KEY, BASE_URL, EMBEDDING_MODEL_PATH,
-    PRODUCT_VECTOR_PATH, FLASK_HOST, FLASK_PORT, FLASK_DEBUG
+    PRODUCT_VECTOR_PATH, ORDER_DB_PATH, FLASK_HOST, FLASK_PORT, FLASK_DEBUG
 )
 from ecommerce_agent.agents import AccessAgent
 
@@ -22,7 +22,8 @@ llm_config = {
 access_agent = AccessAgent(
     llm_config=llm_config,
     embedding_model_path=EMBEDDING_MODEL_PATH,
-    product_vector_path=PRODUCT_VECTOR_PATH
+    product_vector_path=PRODUCT_VECTOR_PATH,
+    order_db_path=ORDER_DB_PATH
 )
 
 

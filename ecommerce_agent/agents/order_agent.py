@@ -3,8 +3,15 @@ import sqlite3
 
 
 class OrderAgent:
-    def __init__(self):
+    def __init__(self, db_path=None):
         # 初始化订单查询工具
+        if db_path is None:
+            try:
+                from ecommerce_agent.config import ORDER_DB_PATH
+            except ModuleNotFoundError:
+                from config import ORDER_DB_PATH
+            db_path = ORDER_DB_PATH
+        self.db_path = db_path
         self.order_tool = self._create_order_tool()
 
     def _create_order_tool(self):
@@ -13,7 +20,7 @@ class OrderAgent:
 
         def query_order_with_product(order_id: str):
             """查询订单信息（含商品ID）"""
-            db_path = "ecommerce_orders.db"
+            db_path = self.db_path
             if not os.path.exists(db_path):
                 return f"错误：未找到订单数据库文件（{db_path}）"
 

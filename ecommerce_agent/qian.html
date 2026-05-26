@@ -101,20 +101,23 @@
 
         <!-- 状态和信息区域 -->
         <footer class="text-center text-sm text-gray-500">
-            <p>后端服务地址: <span class="text-primary font-medium">http://192.168.2.35:5000</span></p>
+            <p>后端服务地址: <span id="api-base-url" class="text-primary font-medium"></span></p>
             <p class="mt-1">© 2023 电商智能查询系统</p>
         </footer>
     </div>
 
     <script>
         // 后端API基础地址
-        const API_BASE_URL = 'http://192.168.2.35:5000';
+        const API_BASE_URL = `${window.location.protocol}//${window.location.hostname}:5000`;
 
         // DOM元素
         const chatMessages = document.getElementById('chat-messages');
         const userQueryInput = document.getElementById('user-query');
         const queryForm = document.getElementById('query-form');
         const connectionStatus = document.getElementById('connection-status');
+        const apiBaseUrl = document.getElementById('api-base-url');
+
+        apiBaseUrl.textContent = API_BASE_URL;
 
         // 页面加载时检查服务器连接
         checkServerConnection();

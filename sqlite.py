@@ -1,8 +1,16 @@
 import sqlite3
 import os
+from pathlib import Path
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_core.documents import Document
+
+
+PROJECT_ROOT = Path(__file__).resolve().parent
+AGENT_ROOT = PROJECT_ROOT / "ecommerce_agent"
+EMBEDDING_MODEL_PATH = PROJECT_ROOT / "bge-large-zh-v1.5"
+PRODUCT_VECTOR_PATH = AGENT_ROOT / "product_vector_store"
+ORDER_DB_PATH = AGENT_ROOT / "ecommerce_orders.db"
 
 
 # ======================
@@ -150,7 +158,7 @@ def create_product_knowledge_base():
         ))
 
     # 初始化嵌入模型（使用本地模型路径，避免下载问题）
-    local_model_path = "bge-large-zh-v1.5"  # 替换为你的本地模型路径
+    local_model_path = str(EMBEDDING_MODEL_PATH)  # 替换为你的本地模型路径
     embeddings = HuggingFaceEmbeddings(
         model_name=local_model_path,
         model_kwargs={'device': 'cpu'},
@@ -159,9 +167,9 @@ def create_product_knowledge_base():
 
     # 创建并保存向量库
     vector_store = FAISS.from_documents(documents, embeddings)
-    if not os.path.exists("product_vector_store"):
-        vector_store.save_local("product_vector_store")
-        print("商品知识库创建完成，已保存到 product_vector_store 目录")
+    if not os.path.exists(PRODUCT_VECTOR_PATH):
+        vector_store.save_local(str(PRODUCT_VECTOR_PATH))
+        print(f"商品知识库创建完成，已保存到 {PRODUCT_VECTOR_PATH} 目录")
     else:
         print("商品知识库已存在，无需重复创建")
 
@@ -174,7 +182,7 @@ def create_product_knowledge_base():
 def init_order_database():
     """初始化订单数据库并插入测试数据"""
     # 连接数据库（如果不存在则创建）
-    conn = sqlite3.connect('ecommerce_orders.db')
+    conn = sqlite3.connect(str(ORDER_DB_PATH))
     cursor = conn.cursor()
 
     # 创建订单表（确保字段完整且与插入数据匹配）
@@ -237,7 +245,7 @@ def init_order_database():
 
     conn.commit()
     conn.close()
-    print("订单数据库初始化完成，已创建 ecommerce_orders.db 并插入10条测试数据")
+    print(f"订单数据库初始化完成，已创建 {ORDER_DB_PATH} 并插入10条测试数据")
 
 
 # 执行初始化

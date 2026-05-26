@@ -5,7 +5,7 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
 
 class AccessAgent:
-    def __init__(self, llm_config, embedding_model_path, product_vector_path):
+    def __init__(self, llm_config, embedding_model_path, product_vector_path, order_db_path):
         # 初始化大模型
         self.llm = self._init_llm(llm_config)
 
@@ -13,7 +13,7 @@ class AccessAgent:
         from .order_agent import OrderAgent
         from .product_agent import ProductAgent
 
-        self.order_agent = OrderAgent()
+        self.order_agent = OrderAgent(db_path=order_db_path)
         self.product_agent = ProductAgent(
             embedding_model_path=embedding_model_path,
             product_vector_path=product_vector_path
